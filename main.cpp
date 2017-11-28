@@ -34,6 +34,14 @@ Node *root;
 
 std::vector< std::string > names( 1 );
 
+void renderBitmapString(void *font,char *string) {
+    char *c;
+    for (c=string; *c != '\0'; c++) {
+        glutBitmapCharacter(font, *c);
+    }
+}
+
+
 void keyboard( unsigned char key, int x, int y )
 {
     if( key == 13 )
@@ -227,22 +235,19 @@ void renderScene(void) {
         void* font = GLUT_BITMAP_9_BY_15;
         const int fontHeight = glutBitmapWidth(font, 1);
         glRasterPos2i( 10, h - ( fontHeight * ( i + 1 ) ) );
-
-        renderBitmapString(font, <#char *string#>)
         
-        glutBitmapString( font, (const unsigned char*)( oss.str().c_str() ) );
+        char *cstr = new char[oss.str().length() + 1];
+        strcpy(cstr, oss.str().c_str());
+        renderBitmapString((void *) font, cstr);
+        
+        delete [] cstr;
+
     }
     
     
     glutSwapBuffers();
 }
 
-void renderBitmapString(void *font,char *string) {
-    char *c;
-    for (c=string; *c != '\0'; c++) {
-        glutBitmapCharacter(font, *c);
-    }
-}
 
 void pressKey(int key, int xx, int yy) {
     
