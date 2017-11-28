@@ -1,8 +1,11 @@
 #include <stdlib.h>
 #include <math.h>
 #include "Room.h"
-#include "tree.hh"
-
+#include "Node.hpp"
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <vector>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -20,7 +23,102 @@ float x=0.0f, z=5.0f;
 float deltaAngle = 0.0f;
 float deltaMove = 0;
 //Room instantiate
-Room r;
+Room *room;
+Node *root;
+
+#define CREATE 1
+#define DELETE 2
+#define MODIFY 3
+
+//Name Variable
+
+std::vector< std::string > names( 1 );
+
+void renderBitmapString(void *font,char *string) {
+    char *c;
+    for (c=string; *c != '\0'; c++) {
+        glutBitmapCharacter(font, *c);
+    }
+}
+
+
+void keyboard( unsigned char key, int x, int y )
+{
+    if( key == 13 )
+    {
+        // enter key
+        names.push_back( "" );
+    }
+    else if( key == 8 )
+    {
+        // backspace
+        names.back().pop_back();
+    }
+    else
+    {
+        // regular text
+        names.back().push_back( key );
+    }
+    
+    glutPostRedisplay();
+}
+
+
+
+void processMenu(int option) {
+    
+    switch (option) {
+        case CREATE : room->addBox("Hello");
+            break;
+        case DELETE : room->deleteBox();
+            break;
+        case MODIFY :break;
+    }
+}
+
+void createPopupMenus() {
+    
+    int menu;
+    menu = glutCreateMenu(processMenu);
+    glutAddMenuEntry("Create",CREATE);
+    glutAddMenuEntry("Delete",DELETE);
+    glutAddMenuEntry("Modify",MODIFY);
+    
+    // attach the menu to the right button
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
+
+// -----------------------------------
+//             Object Selection
+// -----------------------------------
+void onMouse(int button, int state, int x, int y) {
+    if(state != GLUT_DOWN)
+        return;
+    
+    int window_width = glutGet(GLUT_WINDOW_WIDTH);
+    int window_height = glutGet(GLUT_WINDOW_HEIGHT);
+    
+    GLbyte data[4];
+    GLfloat depth;
+    GLuint index;
+    
+    glReadPixels(x, window_height - y - 1, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glReadPixels(x, window_height - y - 1, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+    glReadPixels(x, window_height - y - 1, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
+    
+    int pickedID =
+    data[0] +
+    data[1] * 256 +
+    data[2] * 256*256;
+    
+    std::cout<<pickedID<<"\n";
+    
+    room->selectBox(pickedID*-1);
+    
+}
+
+
+
 
 void changeSize(int w, int h) {
     
@@ -75,62 +173,19 @@ void drawSnowMan() {
 }
 
 
-void wall(double thickness)    // function to create the walls with given thickness
-{
-    glPushMatrix();
-    glTranslated(0.5,0.5*thickness,0.5);
-    glScaled(1.0,thickness,1.0);
-    glutSolidCube(5.0);
-    glPopMatrix();
-}
-
-void drawWalls(int wSize)
-{
-    glBegin(GL_QUADS);
-    /* Floor */
-    glColor3f(0.4f, 0.4f, 0.4f);
-    glVertex3f(-wSize,-wSize,-wSize);
-    glVertex3f(wSize,-wSize,-wSize);
-    glVertex3f(wSize,-wSize,wSize);
-    glVertex3f(-wSize,-wSize,wSize);
-    /* Ceiling */
-    glColor3f(0.4f, 0.4f, 0.4f);
-    glVertex3f(-wSize,wSize,-wSize);
-    glVertex3f(wSize,wSize,-wSize);
-    glVertex3f(wSize,wSize,wSize);
-    glVertex3f(-wSize,wSize,wSize);
-    /* Walls */
-    
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex3f(-wSize,-wSize,wSize);
-    glVertex3f(wSize,-wSize,wSize);
-    glVertex3f(wSize,wSize,wSize);
-    glVertex3f(-wSize,wSize,wSize);
-    
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(-wSize,-wSize,-wSize);
-    glVertex3f(wSize,-wSize,-wSize);
-    glVertex3f(wSize,wSize,-wSize);
-    glVertex3f(-wSize,wSize,-wSize);
-    glColor3f(0.0f, 0.0f, 1.0f);
-    glVertex3f(wSize,wSize,wSize);
-    glVertex3f(wSize,-wSize,wSize);
-    glVertex3f(wSize,-wSize,-wSize);
-    glVertex3f(wSize,wSize,-wSize);
-    glColor3f(0.5f, 0.5f, 1.0f);
-    glVertex3f(-wSize,wSize,wSize);
-    glVertex3f(-wSize,-wSize,wSize);
-    glVertex3f(-wSize,-wSize,-wSize);
-    glVertex3f(-wSize,wSize,-wSize);
-    glEnd();
-}
-
 
 void computePos(float deltaMove) {
     
-    x += deltaMove * lx * 0.1f;
-    z += deltaMove * lz * 0.1f;
+    float auxX = x+deltaMove * lx * 0.1f;
+    float auxZ = z+deltaMove * lz * 0.1f;
+    if(auxX >= -9.50 && auxX <= 9.50){
+        x += deltaMove * lx * 0.1f;
+    }
+    if(auxZ >= -9.50 && auxZ <= 9.50){
+        z += deltaMove * lz * 0.1f;
+    }
 }
+
 
 void computeDir(float deltaAngle) {
     
@@ -156,25 +211,39 @@ void renderScene(void) {
               x+lx, 1.0f,  z+lz,
               0.0f, 1.0f,  0.0f);
     
-    // Draw ground
-    /*
-     glColor3f(0.6f, 0.6f, 0.6f);
-     glBegin(GL_QUADS);
-     glVertex3f(-100.0f, 0.0f, -100.0f);
-     glVertex3f(-100.0f, 0.0f,  100.0f);
-     glVertex3f( 100.0f, 0.0f,  100.0f);
-     glVertex3f( 100.0f, 0.0f, -100.0f);
-     glEnd();
-     */
-    
     // Draw walls
     glBegin(GL_QUADS);
     glColor3f(0.9f, 0.9f, 0.9f);
     glTranslated(0.08,10,0.08);
-    r.drawRoom(10);
+    room->drawRoom(10);
     glEnd();
+    /*
+    glMatrixMode( GL_PROJECTION );
+    glLoadIdentity();
+    double w = glutGet( GLUT_WINDOW_WIDTH );
+    double h = glutGet( GLUT_WINDOW_HEIGHT );
+    glOrtho( 0, w, 0, h, -1, 1 );
     
+    glMatrixMode( GL_MODELVIEW );
+    glLoadIdentity();
     
+    for( size_t i = 0; i < names.size(); ++i )
+    {
+        std::ostringstream oss;
+        oss << ( i + 1 ) << ": " << names[i];
+        
+        void* font = GLUT_BITMAP_9_BY_15;
+        const int fontHeight = glutBitmapWidth(font, 1);
+        glRasterPos2i( 10, h - ( fontHeight * ( i + 1 ) ) );
+        
+        char *cstr = new char[oss.str().length() + 1];
+        strcpy(cstr, oss.str().c_str());
+        renderBitmapString((void *) font, cstr);
+        
+        delete [] cstr;
+        
+    }
+    */
     
     glutSwapBuffers();
 }
@@ -183,10 +252,10 @@ void renderScene(void) {
 void pressKey(int key, int xx, int yy) {
     
     switch (key) {
-        case GLUT_KEY_LEFT : deltaAngle = -0.01f; break;
-        case GLUT_KEY_RIGHT : deltaAngle = 0.01f; break;
-        case GLUT_KEY_UP : deltaMove = 0.5f; break;
-        case GLUT_KEY_DOWN : deltaMove = -0.5f; break;
+        case GLUT_KEY_LEFT : deltaAngle = -0.05f; break;
+        case GLUT_KEY_RIGHT : deltaAngle = 0.05f; break;
+        case GLUT_KEY_UP : deltaMove = 2.0f; break;
+        case GLUT_KEY_DOWN : deltaMove = -2.0f; break;
     }
 }
 
@@ -200,19 +269,34 @@ void releaseKey(int key, int x, int y) {
     }
 }
 
+void init(){
+    
+    root = new Node("Root");
+    root->parent = NULL;
+    room = new Room();
+    
+    root->add_child(new Node("RoomN"));
+    room->currentNode = root;
+    
+}
+
 int main(int argc, char **argv) {
     
     // init GLUT and create window
     glutInit(&argc, argv);
+    init();
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowPosition(100,100);
-    glutInitWindowSize(320,320);
+    glutInitWindowSize(3000,800);
     glutCreateWindow("Rooms - OpenGL");
     
     // register callbacks
     glutDisplayFunc(renderScene);
     glutReshapeFunc(changeSize);
     glutIdleFunc(renderScene);
+    glutMouseFunc(onMouse);
+    glutKeyboardFunc( keyboard );
+    createPopupMenus();
     
     glutSpecialFunc(pressKey);
     
@@ -228,4 +312,3 @@ int main(int argc, char **argv) {
     
     return 1;
 }
-

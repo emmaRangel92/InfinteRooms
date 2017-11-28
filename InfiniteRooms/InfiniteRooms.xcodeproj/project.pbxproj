@@ -30,7 +30,7 @@
 		5C1438F61FCD062500C70BFF /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		5C1438F81FCD062C00C70BFF /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5C1438FA1FCD066D00C70BFF /* Room.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
-		5C1438FB1FCD069500C70BFF /* tree.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = tree.hh; sourceTree = "<group>"; };
+		5C1438FB1FCD069500C70BFF /* Node.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Node.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +68,7 @@
 			children = (
 				5C1438EE1FCD061600C70BFF /* main.cpp */,
 				5C1438FA1FCD066D00C70BFF /* Room.h */,
-				5C1438FB1FCD069500C70BFF /* tree.hh */,
+				5C1438FB1FCD069500C70BFF /* Node.hpp */,
 			);
 			path = InfiniteRooms;
 			sourceTree = "<group>";
@@ -254,7 +254,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = SFHH67ZAS3;
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -264,7 +264,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = SFHH67ZAS3;
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
