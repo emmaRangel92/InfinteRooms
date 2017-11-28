@@ -272,35 +272,6 @@ void changeSize(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-void drawSnowMan() {
-    
-    glColor3f(1.0f, 1.0f, 1.0f);
-    
-    // Draw Body
-    
-    glTranslatef(0.0f ,0.75f, 0.0f);
-    glutSolidSphere(0.75f,20,20);
-    
-    // Draw Head
-    glTranslatef(0.0f, 1.0f, 0.0f);
-    glutSolidSphere(0.25f,20,20);
-    
-    // Draw Eyes
-    glPushMatrix();
-    glColor3f(0.0f,0.0f,0.0f);
-    glTranslatef(0.05f, 0.10f, 0.18f);
-    glutSolidSphere(0.05f,10,10);
-    glTranslatef(-0.1f, 0.0f, 0.0f);
-    glutSolidSphere(0.05f,10,10);
-    glPopMatrix();
-    
-    // Draw Nose
-    glColor3f(1.0f, 0.5f , 0.5f);
-    glRotatef(0.0f,1.0f, 0.0f, 0.0f);
-    glutSolidCone(0.08f,0.5f,10,2);
-}
-
-
 
 void computePos(float deltaMove) {
     
@@ -342,9 +313,20 @@ void renderScene(void) {
     // Draw walls
     glBegin(GL_QUADS);
     glColor3f(0.9f, 0.9f, 0.9f);
-    glTranslated(0.08,10,0.08);
+    
     room->drawRoom(10);
     glEnd();
+    
+    
+    glMatrixMode(GL_MODELVIEW);
+    
+    glPushMatrix();
+    glTranslated(-8, 1.2, -10);
+    glScaled(1.5, 3, 0.1);//Here you scale the doors
+
+    room->drawDoors();
+    glPopMatrix();
+    
     /*
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
