@@ -108,6 +108,8 @@ public:
     
     void drawDoors(){
         
+        int offSet = 0;
+
         for( int i = 0; i < (sizeof(currentNode->children)/sizeof(*currentNode->children)); i ++ ) {
             //draw a door
             
@@ -121,29 +123,38 @@ public:
             }
             
             if(currentNode->children[i] != NULL){
-                
-                glutSolidCube(1);
-                std::string str = currentNode->children[i]->info;
-                
-                //Displaying Text
-                char *cstr = new char[str.length() + 1];
-                strcpy(cstr, str.c_str());
-                renderBitmapString(0.0f, 1.0f, 0.0f, (void *)font, cstr );
-                delete [] cstr;
-                
-                //Bounding Box
-                if(selectedIndex == i){
-                    glutWireCube(1.5);
-                }
-                glTranslatef(1.5,0,0);
-                
-            }else{
-                break;
-            }
+
             
+                glPushMatrix();{
+                    glTranslated(offSet, 0, 0);
+                    glutSolidCube(1);
+                    
+                    std::string str = currentNode->children[i]->info;
+                    
+                    //Displaying Text
+                    char *cstr = new char[str.length() + 1];
+                    strcpy(cstr, str.c_str());
+                    renderBitmapString(-0.2f, 0.65f, 5.0f, (void *)font, cstr );
+                    delete [] cstr;
+                    
+                    //Bounding Box
+                    if(selectedIndex == i){
+                        glutWireCube(1.5);
+                    }
+                    
+                    
+                }
+
+                glPopMatrix();
+                
+
+
+                offSet += 2;
+                
+               
+            }
+            else break;
         }
-        
-        
     }
     
     
@@ -168,17 +179,17 @@ public:
         glVertex3f(-wSize,-0.0,wSize);
         /* Ceiling */
         glColor3f(0.4f, 0.4f, 0.4f);
-        glVertex3f(-wSize,wSize*.75,-wSize);
-        glVertex3f(wSize,wSize*.75,-wSize);
-        glVertex3f(wSize,wSize*.75,wSize);
-        glVertex3f(-wSize,wSize*.75,wSize);
+        glVertex3f(-wSize,wSize*.5,-wSize);
+        glVertex3f(wSize,wSize*.5,-wSize);
+        glVertex3f(wSize,wSize*.5,wSize);
+        glVertex3f(-wSize,wSize*.5,wSize);
         /* Walls */
         //Back Wall
         glColor3f(1.0f, 0.0f, 0.0f);
         glVertex3f(-wSize,-0.0,wSize);
         glVertex3f(wSize,-0.0,wSize);
-        glVertex3f(wSize,wSize*.75,wSize);
-        glVertex3f(-wSize,wSize*.75,wSize);
+        glVertex3f(wSize,wSize*.5,wSize);
+        glVertex3f(-wSize,wSize*.5,wSize);
         //Back door
         glColor3f(0.2f, 0.2f, 0.2f);
         glVertex3f(-backdoorW,-0.0,wSize-.01);
@@ -186,27 +197,28 @@ public:
         glVertex3f(backdoorW,backdoorH,wSize-.01);
         glVertex3f(-backdoorW,backdoorH,wSize-.01);
         //Front Wall
-        glColor3f(0.0f, 1.0f, 0.0f);
+        glColor3f(0.3f, 0.3f, 0.3f);
         glVertex3f(-wSize,-0.0,-wSize);
         glVertex3f(wSize,-0.0,-wSize);
-        glVertex3f(wSize,wSize*.75,-wSize);
-        glVertex3f(-wSize,wSize*.75,-wSize);
+        glVertex3f(wSize,wSize*.5,-wSize);
+        glVertex3f(-wSize,wSize*.5,-wSize);
         
         
         // Right Wall
         glColor3f(0.0f, 0.0f, 1.0f);
-        glVertex3f(wSize,wSize*.75,wSize);
+        glVertex3f(wSize,wSize*.5,wSize);
         glVertex3f(wSize,-0.0,wSize);
         glVertex3f(wSize,-0.0,-wSize);
-        glVertex3f(wSize,wSize*.75,-wSize);
+        glVertex3f(wSize,wSize*.5,-wSize);
         // Left Wall
         glColor3f(0.5f, 0.5f, 1.0f);
-        glVertex3f(-wSize,wSize*.75,wSize);
+        glVertex3f(-wSize,wSize*.5,wSize);
         glVertex3f(-wSize,-0.0,wSize);
         glVertex3f(-wSize,-0.0,-wSize);
-        glVertex3f(-wSize,wSize*.75,-wSize);
+        glVertex3f(-wSize,wSize*.5,-wSize);
         
-        drawDoors();
+        glPushMatrix();
+
     }
     
     
