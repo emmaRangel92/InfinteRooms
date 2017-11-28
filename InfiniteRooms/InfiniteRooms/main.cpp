@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <fstream>
 #include <vector>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -39,6 +40,133 @@ void renderBitmapString(void *font,char *string) {
     for (c=string; *c != '\0'; c++) {
         glutBitmapCharacter(font, *c);
     }
+}
+
+void createMtlFile(){
+    std::ofstream outfile ("master.mtl");
+
+    outfile << "newmtl green" << std::endl;
+    outfile << "Ka 0.0000 1.0000 0.0000" << std::endl;
+    outfile << "Kd 0.0000 1.0000 0.0000" << std::endl;
+    outfile << "illum 1" << std::endl;
+    
+    outfile << "newmtl red" << std::endl;
+    outfile << "Ka 1.0000 0.0000 0.0000" << std::endl;
+    outfile << "Kd 1.0000 0.0000 0.0000" << std::endl;
+    outfile << "illum 1" << std::endl;
+    
+    outfile << "newmtl blue" << std::endl;
+    outfile << "Ka 0.0000 0.0000 1.0000" << std::endl;
+    outfile << "Kd 0.0000 0.0000 1.0000" << std::endl;
+    outfile << "illum 1" << std::endl;
+    
+    outfile << "newmtl pink" << std::endl;
+    outfile << "Ka 1.0000 0.0000 1.0000" << std::endl;
+    outfile << "Kd 1.0000 0.0000 1.0000" << std::endl;
+    outfile << "illum 1" << std::endl;
+    
+    outfile << "newmtl yellow" << std::endl;
+    outfile << "Ka 1.0000 1.0000 0.0000" << std::endl;
+    outfile << "Kd 1.0000 1.0000 0.0000" << std::endl;
+    outfile << "illum 1" << std::endl;
+    
+    outfile << "newmtl purple" << std::endl;
+    outfile << "Ka 0.5000 0.5000 1.0000" << std::endl;
+    outfile << "Kd 0.5000 0.5000 1.0000" << std::endl;
+    outfile << "illum 1" << std::endl;
+    
+    outfile << "newmtl grey" << std::endl;
+    outfile << "Ka 0.4000 0.4000 0.4000" << std::endl;
+    outfile << "Kd 0.4000 0.4000 0.4000" << std::endl;
+    outfile << "illum 1" << std::endl;
+    
+    outfile.close();
+
+}
+
+void createOBJfile(int wSize, int doors){
+    
+    createMtlFile();
+    
+    std::ofstream outfile ("room.obj");
+
+//    Main room
+    outfile << "mtllib master.mtl" << std::endl;
+    
+//    Walls vertices
+    outfile << "v 0.000000 " << wSize/2 << ".000000 " << wSize*3 << ".000000" << std::endl; // 1 top right
+    outfile << "v 0.000000 0.000000 " << wSize*3 << ".000000" << std::endl; // 2 bottom right
+    outfile << "v " << wSize << ".000000 0.000000 " << wSize*3 << ".000000" << std::endl; // 3 bottomn left
+    outfile << "v " << wSize << ".000000 " << wSize/2 << ".000000 " << wSize << ".000000" << std::endl; // 4 top left
+    outfile << "v 0.000000 " << wSize/2 << ".000000 0.000000" << std::endl; // 5
+    outfile << "v 0.000000 0.000000 0.000000" << std::endl; // 6
+    outfile << "v " << wSize << ".000000 0.000000 0.000000" << std::endl; // 7
+    outfile << "v " << wSize << ".000000 " << wSize/2 << ".000000 0.000000" << std::endl; // 8
+    
+    outfile << "g front" << std::endl;
+    outfile << "usemtl green" << std::endl;
+    outfile << "f 1 2 3 4" << std::endl;
+    
+    outfile << "g back" << std::endl;
+    outfile << "usemtl red" << std::endl;
+    outfile << "f 8 7 6 5" << std::endl;
+    
+    outfile << "g right" << std::endl;
+    outfile << "usemtl blue" << std::endl;
+    outfile << "f 4 3 7 8" << std::endl;
+    
+    outfile << "g top" << std::endl;
+    outfile << "usemtl grey" << std::endl;
+    outfile << "f 5 1 4 8" << std::endl;
+    
+    outfile << "g left" << std::endl;
+    outfile << "usemtl purple" << std::endl;
+    outfile << "f 5 6 2 1" << std::endl;
+    
+    outfile << "g bottom" << std::endl;
+    outfile << "usemtl yellow" << std::endl;
+    outfile << "f 2 6 7 3" << std::endl;
+    
+//    First door vertices
+    
+    if(doors > 0){
+        //Build first foor
+    }
+    
+//    Second door vertices
+    
+    if(doors > 1){
+        //Build second foor
+    }
+
+//    Third door vertices
+    
+    if(doors > 2){
+        //Build third foor
+    }
+    
+//    Fourth door vertices
+    
+    if(doors > 3){
+        //Build fourth foor
+    }
+    
+//    Fifth door vertices
+    
+    if(doors > 4){
+        //Build fifth foor
+    }
+
+//    Last door vertices
+    
+    if(doors > 4){
+        //Build last foor
+    }
+    
+    
+    
+    outfile.close();
+
 }
 
 
@@ -282,6 +410,7 @@ void init(){
 
 int main(int argc, char **argv) {
     
+    createOBJfile(10, 4);
     // init GLUT and create window
     glutInit(&argc, argv);
     init();
