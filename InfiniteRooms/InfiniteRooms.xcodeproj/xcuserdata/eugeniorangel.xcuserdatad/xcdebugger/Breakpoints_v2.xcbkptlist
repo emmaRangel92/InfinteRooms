@@ -15,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "156"
             endingLineNumber = "156"
-            landmarkName = "computePos(float deltaMove)"
+            landmarkName = "createOBJfile(int wSize, int doors)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
