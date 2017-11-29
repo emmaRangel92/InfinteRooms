@@ -94,9 +94,9 @@ void createOBJfile(int wSize, int doors){
     outfile << "mtllib master.mtl" << std::endl;
     
 //    Walls vertices
-    outfile << "v 0.000000 " << wSize/2 << ".000000 " << wSize*3 << ".000000" << std::endl; // 1 top right
-    outfile << "v 0.000000 0.000000 " << wSize*3 << ".000000" << std::endl; // 2 bottom right
-    outfile << "v " << wSize << ".000000 0.000000 " << wSize*3 << ".000000" << std::endl; // 3 bottomn left
+    outfile << "v 0.000000 " << wSize/2 << ".000000 " << wSize << ".000000" << std::endl; // 1 top right
+    outfile << "v 0.000000 0.000000 " << wSize << ".000000" << std::endl; // 2 bottom right
+    outfile << "v " << wSize << ".000000 0.000000 " << wSize << ".000000" << std::endl; // 3 bottomn left
     outfile << "v " << wSize << ".000000 " << wSize/2 << ".000000 " << wSize << ".000000" << std::endl; // 4 top left
     outfile << "v 0.000000 " << wSize/2 << ".000000 0.000000" << std::endl; // 5
     outfile << "v 0.000000 0.000000 0.000000" << std::endl; // 6
@@ -129,8 +129,20 @@ void createOBJfile(int wSize, int doors){
     
 //    First door vertices
     
+    int doorDepth = .5;
+    int doorLength = 1.5;
+
     if(doors > 0){
         //Build first foor
+        outfile << "v " << wSize - (wSize *.1) - doorLength << ".000000 " << wSize/2*.8 << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 9 top right
+        outfile << "v " << wSize - (wSize *.1) - doorLength << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 10 bottom right
+        outfile << "v " << wSize - (wSize *.1) << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 11 bottom left
+        outfile << "v " << wSize - (wSize *.1) << ".000000 " << wSize/2*.8 << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 12 top left
+
+        outfile << "g door" << std::endl;
+        outfile << "usemtl yellow" << std::endl;
+        outfile << "f 9 10 11 12" << std::endl;
+
     }
     
 //    Second door vertices
