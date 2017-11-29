@@ -289,12 +289,14 @@ void resetToEntrance(){
 
 void resetToDoor(){
     
+    Node *temp = room->currentNode->parent;
+    room->currentNode = temp;
+    cout<<"-------------Previous room: "<<temp->info<<"\n";
+    
     float aux_x = room->currentNode->previousX;
     float aux_z = room->currentNode->previousZ;
     
-    cout<<"Previous room: "<<room->currentNode->parent->info;
-    
-    room->currentNode = room->currentNode->parent;
+
     
     // actual vector representing the camera's direction
     lx = 0.0f;
@@ -312,14 +314,9 @@ void computePos(float deltaMove) {
     float auxZ = z+deltaMove * lz * 0.1f;
     cout<<"x="<<x<<endl;
     cout<<"z="<<z<<endl;
-    cout<<"children number: "<<root->childNumber()<<endl;
+    cout<<"children number: "<<room->currentNode->childNumber()<<endl;
     cout<<endl;
-    /*
-     glVertex3f(-backdoorW,-0.0,wSize-.01);
-     glVertex3f(backdoorW,-0.0,wSize-.01);
-     glVertex3f(backdoorW,backdoorH,wSize-.01);
-     glVertex3f(-backdoorW,backdoorH,wSize-.01);
-     */
+
     if(auxX >= -9.50 && auxX <= 9.50){
         x += deltaMove * lx * 0.1f;
     }
@@ -331,7 +328,7 @@ void computePos(float deltaMove) {
         resetToDoor();
     }
     
-    switch (root->childNumber()) {
+    switch (room->currentNode->childNumber()) {
         case 1:
             if(x >= -8.25 && x <= -7.75 && z <= -9.0){
             
