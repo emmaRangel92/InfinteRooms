@@ -72,6 +72,16 @@ void createMtlFile(){
     outfile << "Kd 1.0000 0.0000 1.0000" << std::endl;
     outfile << "illum 1" << std::endl;
     
+    outfile << "newmtl black" << std::endl;
+    outfile << "Ka 0.0000 0.0000 0.0000" << std::endl;
+    outfile << "Kd 0.0000 0.0000 0.0000" << std::endl;
+    outfile << "illum 1" << std::endl;
+    
+    outfile << "newmtl white" << std::endl;
+    outfile << "Ka 1.0000 1.0000 1.0000" << std::endl;
+    outfile << "Kd 1.0000 1.0000 1.0000" << std::endl;
+    outfile << "illum 1" << std::endl;
+    
     outfile << "newmtl yellow" << std::endl;
     outfile << "Ka 1.0000 1.0000 0.0000" << std::endl;
     outfile << "Kd 1.0000 1.0000 0.0000" << std::endl;
@@ -111,12 +121,16 @@ void createOBJfile(int wSize, int doors){
     outfile << "v " << wSize << ".000000 " << wSize/2 << ".000000 0.000000" << std::endl; // 8
     
     outfile << "g front" << std::endl;
-    outfile << "usemtl green" << std::endl;
+    outfile << "usemtl grey" << std::endl;
     outfile << "f 1 2 3 4" << std::endl;
     
     outfile << "g back" << std::endl;
     outfile << "usemtl red" << std::endl;
     outfile << "f 8 7 6 5" << std::endl;
+    
+    outfile << "g right" << std::endl;
+    outfile << "usemtl blue" << std::endl;
+    outfile << "f 4 3 7 8" << std::endl;
     
     outfile << "g right" << std::endl;
     outfile << "usemtl blue" << std::endl;
@@ -138,17 +152,43 @@ void createOBJfile(int wSize, int doors){
     
     int doorDepth = .5;
     int doorLength = 1.5;
+    int offset = 1;
+    int doorHeight = 3;
 
     if(doors > 0){
         //Build first foor
-        outfile << "v " << wSize - (wSize *.1) - doorLength << ".000000 " << wSize/2*.8 << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 9 top right
-        outfile << "v " << wSize - (wSize *.1) - doorLength << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 10 bottom right
-        outfile << "v " << wSize - (wSize *.1) << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 11 bottom left
-        outfile << "v " << wSize - (wSize *.1) << ".000000 " << wSize/2*.8 << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 12 top left
+        outfile << "v " << wSize - offset - doorLength << ".000000 " << doorHeight << ".000000 " << wSize << ".000000" << std::endl; // 9 top right  1
+        outfile << "v " << wSize - offset - doorLength << ".000000 " << "0.000000 " << wSize  << ".000000" << std::endl; // 10 bottom right  2
+        outfile << "v " << wSize - offset << ".000000 " << "0.000000 " << wSize  << ".000000" << std::endl; // 11 bottom left  3
+        outfile << "v " << wSize - offset << ".000000 " << doorHeight << ".000000 " << wSize << ".000000" << std::endl; // 12 top left  4
+        outfile << "v " << wSize - offset - doorLength << ".000000 " << doorHeight << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 13  5
+        outfile << "v " << wSize - offset - doorLength << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 14  6
+        outfile << "v " << wSize - offset << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 15  7
+        outfile << "v " << wSize - offset << ".000000 " << doorHeight << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 16  8
 
-        outfile << "g door" << std::endl;
-        outfile << "usemtl yellow" << std::endl;
+        outfile << "g doorfront1" << std::endl;
+        outfile << "usemtl red" << std::endl;
         outfile << "f 9 10 11 12" << std::endl;
+        
+        outfile << "g doorback1" << std::endl;
+        outfile << "usemtl red" << std::endl;
+        outfile << "f 16 15 14 13" << std::endl;
+        
+        outfile << "g doorright1" << std::endl;
+        outfile << "usemtl red" << std::endl;
+        outfile << "f 12 11 15 16" << std::endl;
+        
+        outfile << "g doortop1" << std::endl;
+        outfile << "usemtl red" << std::endl;
+        outfile << "f 13 9 12 16" << std::endl;
+        
+        outfile << "g doorleft1" << std::endl;
+        outfile << "usemtl red" << std::endl;
+        outfile << "f 13 14 10 9" << std::endl;
+        
+        outfile << "g doorbottom1" << std::endl;
+        outfile << "usemtl red" << std::endl;
+        outfile << "f 10 14 15 11" << std::endl;
 
     }
     
@@ -156,30 +196,190 @@ void createOBJfile(int wSize, int doors){
     
     if(doors > 1){
         //Build second foor
+        outfile << "v " << wSize - offset*2 - doorLength << ".000000 " << doorHeight << ".000000 " << wSize << ".000000" << std::endl; // 17 top right  9
+        outfile << "v " << wSize - offset*2 - doorLength << ".000000 " << "0.000000 " << wSize  << ".000000" << std::endl; // 18 bottom right  10
+        outfile << "v " << wSize - offset*2 << ".000000 " << "0.000000 " << wSize  << ".000000" << std::endl; // 19 bottom left  11
+        outfile << "v " << wSize - offset*2 << ".000000 " << doorHeight << ".000000 " << wSize << ".000000" << std::endl; // 20 top left  12
+        outfile << "v " << wSize - offset*2 - doorLength << ".000000 " << doorHeight << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 21  13
+        outfile << "v " << wSize - offset*2 - doorLength << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 22  14
+        outfile << "v " << wSize - offset*2 << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 23  15
+        outfile << "v " << wSize - offset*2 << ".000000 " << doorHeight << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 24  16
+        
+        outfile << "g doorfront2" << std::endl;
+        outfile << "usemtl green" << std::endl;
+        outfile << "f 17 18 19 20" << std::endl;
+        
+        outfile << "g doorback2" << std::endl;
+        outfile << "usemtl green" << std::endl;
+        outfile << "f 24 23 22 21" << std::endl;
+        
+        outfile << "g doorright2" << std::endl;
+        outfile << "usemtl green" << std::endl;
+        outfile << "f 20 19 23 24" << std::endl;
+        
+        outfile << "g doortop2" << std::endl;
+        outfile << "usemtl green" << std::endl;
+        outfile << "f 21 17 20 24" << std::endl;
+        
+        outfile << "g doorleft2" << std::endl;
+        outfile << "usemtl green" << std::endl;
+        outfile << "f 21 22 18 17" << std::endl;
+        
+        outfile << "g doorbottom2" << std::endl;
+        outfile << "usemtl green" << std::endl;
+        outfile << "f 18 22 23 19" << std::endl;
     }
 
 //    Third door vertices
     
     if(doors > 2){
         //Build third foor
+        outfile << "v " << wSize - offset*3 - doorLength << ".000000 " << doorHeight << ".000000 " << wSize << ".000000" << std::endl; // 25 top right  17
+        outfile << "v " << wSize - offset*3 - doorLength << ".000000 " << "0.000000 " << wSize  << ".000000" << std::endl; // 26 bottom right  18
+        outfile << "v " << wSize - offset*3 << ".000000 " << "0.000000 " << wSize  << ".000000" << std::endl; // 27 bottom left  19
+        outfile << "v " << wSize - offset*3 << ".000000 " << doorHeight << ".000000 " << wSize << ".000000" << std::endl; // 28 top left  20
+        outfile << "v " << wSize - offset*3 - doorLength << ".000000 " << doorHeight << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 29  21
+        outfile << "v " << wSize - offset*3 - doorLength << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 30  22
+        outfile << "v " << wSize - offset*3 << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 31  23
+        outfile << "v " << wSize - offset*3 << ".000000 " << doorHeight << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 32  24
+        
+        outfile << "g doorfront3" << std::endl;
+        outfile << "usemtl blue" << std::endl;
+        outfile << "f 25 26 27 28" << std::endl;
+        
+        outfile << "g doorback3" << std::endl;
+        outfile << "usemtl blue" << std::endl;
+        outfile << "f 32 31 30 29" << std::endl;
+        
+        outfile << "g doorright3" << std::endl;
+        outfile << "usemtl blue" << std::endl;
+        outfile << "f 28 27 31 32" << std::endl;
+        
+        outfile << "g doortop3" << std::endl;
+        outfile << "usemtl blue" << std::endl;
+        outfile << "f 29 25 28 32" << std::endl;
+        
+        outfile << "g doorleft3" << std::endl;
+        outfile << "usemtl blue" << std::endl;
+        outfile << "f 29 30 26 25" << std::endl;
+        
+        outfile << "g doorbottom3" << std::endl;
+        outfile << "usemtl blue" << std::endl;
+        outfile << "f 26 30 31 27" << std::endl;
     }
     
 //    Fourth door vertices
     
     if(doors > 3){
         //Build fourth foor
+        outfile << "v " << wSize - offset*4 - doorLength << ".000000 " << doorHeight << ".000000 " << wSize << ".000000" << std::endl; // 33 top right  25
+        outfile << "v " << wSize - offset*4 - doorLength << ".000000 " << "0.000000 " << wSize  << ".000000" << std::endl; // 34 bottom right  26
+        outfile << "v " << wSize - offset*4 << ".000000 " << "0.000000 " << wSize  << ".000000" << std::endl; // 35 bottom left  27
+        outfile << "v " << wSize - offset*4 << ".000000 " << doorHeight << ".000000 " << wSize << ".000000" << std::endl; // 36 top left  28
+        outfile << "v " << wSize - offset*4 - doorLength << ".000000 " << doorHeight << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 37  29
+        outfile << "v " << wSize - offset*4 - doorLength << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 38  30
+        outfile << "v " << wSize - offset*4 << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 39  31
+        outfile << "v " << wSize - offset*4 << ".000000 " << doorHeight << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 40  32
+    
+        outfile << "g doorfront4" << std::endl;
+        outfile << "usemtl black" << std::endl;
+        outfile << "f 33 34 35 36" << std::endl;
+        
+        outfile << "g doorback4" << std::endl;
+        outfile << "usemtl black" << std::endl;
+        outfile << "f 40 39 38 37" << std::endl;
+        
+        outfile << "g doorright4" << std::endl;
+        outfile << "usemtl black" << std::endl;
+        outfile << "f 36 35 39 40" << std::endl;
+        
+        outfile << "g doortop4" << std::endl;
+        outfile << "usemtl black" << std::endl;
+        outfile << "f 37 33 36 40" << std::endl;
+        
+        outfile << "g doorleft4" << std::endl;
+        outfile << "usemtl black" << std::endl;
+        outfile << "f 37 38 34 33" << std::endl;
+        
+        outfile << "g doorbottom4" << std::endl;
+        outfile << "usemtl black" << std::endl;
+        outfile << "f 34 38 39 35" << std::endl;
     }
     
 //    Fifth door vertices
     
     if(doors > 4){
         //Build fifth foor
+        outfile << "v " << wSize - offset*5 - doorLength << ".000000 " << doorHeight << ".000000 " << wSize << ".000000" << std::endl; // 41 top right
+        outfile << "v " << wSize - offset*5 - doorLength << ".000000 " << "0.000000 " << wSize  << ".000000" << std::endl; // 42 bottom right
+        outfile << "v " << wSize - offset*5 << ".000000 " << "0.000000 " << wSize  << ".000000" << std::endl; // 43 bottom left
+        outfile << "v " << wSize - offset*5 << ".000000 " << doorHeight << ".000000 " << wSize << ".000000" << std::endl; // 44 top left
+        outfile << "v " << wSize - offset*5 - doorLength << ".000000 " << doorHeight << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 45
+        outfile << "v " << wSize - offset*5 - doorLength << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 46
+        outfile << "v " << wSize - offset*5 << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 47
+        outfile << "v " << wSize - offset*5 << ".000000 " << doorHeight << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 48
+        
+        outfile << "g doorfront5" << std::endl;
+        outfile << "usemtl white" << std::endl;
+        outfile << "f 41 42 43 44" << std::endl;
+        
+        outfile << "g doorback5" << std::endl;
+        outfile << "usemtl white" << std::endl;
+        outfile << "f 48 47 46 45" << std::endl;
+        
+        outfile << "g doorright5" << std::endl;
+        outfile << "usemtl white" << std::endl;
+        outfile << "f 44 43 47 48" << std::endl;
+        
+        outfile << "g doortop5" << std::endl;
+        outfile << "usemtl white" << std::endl;
+        outfile << "f 45 41 44 48" << std::endl;
+        
+        outfile << "g doorleft5" << std::endl;
+        outfile << "usemtl white" << std::endl;
+        outfile << "f 45 46 42 41" << std::endl;
+        
+        outfile << "g doorbottom5" << std::endl;
+        outfile << "usemtl white" << std::endl;
+        outfile << "f 42 46 47 43" << std::endl;
     }
 
 //    Last door vertices
     
     if(doors > 4){
         //Build last foor
+        outfile << "v " << wSize - offset*6 - doorLength << ".000000 " << doorHeight << ".000000 " << wSize << ".000000" << std::endl; // 49 top right
+        outfile << "v " << wSize - offset*6 - doorLength << ".000000 " << "0.000000 " << wSize  << ".000000" << std::endl; // 50 bottom right
+        outfile << "v " << wSize - offset*6 << ".000000 " << "0.000000 " << wSize  << ".000000" << std::endl; // 51 bottom left
+        outfile << "v " << wSize - offset*6 << ".000000 " << doorHeight << ".000000 " << wSize << ".000000" << std::endl; // 52 top left
+        outfile << "v " << wSize - offset*6 - doorLength << ".000000 " << doorHeight << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 53
+        outfile << "v " << wSize - offset*6 - doorLength << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 54
+        outfile << "v " << wSize - offset*6 << ".000000 " << "0.000000 " << wSize - doorDepth << ".000000" << std::endl; // 55
+        outfile << "v " << wSize - offset*6 << ".000000 " << doorHeight << ".000000 " << wSize - doorDepth << ".000000" << std::endl; // 56
+        
+        outfile << "g doorfront6" << std::endl;
+        outfile << "usemtl pink" << std::endl;
+        outfile << "f 49 50 51 52" << std::endl;
+        
+        outfile << "g doorback6" << std::endl;
+        outfile << "usemtl pink" << std::endl;
+        outfile << "f 56 55 54 53" << std::endl;
+        
+        outfile << "g doorright6" << std::endl;
+        outfile << "usemtl pink" << std::endl;
+        outfile << "f 52 51 55 56" << std::endl;
+        
+        outfile << "g doortop6" << std::endl;
+        outfile << "usemtl pink" << std::endl;
+        outfile << "f 53 49 52 56" << std::endl;
+        
+        outfile << "g doorleft6" << std::endl;
+        outfile << "usemtl pink" << std::endl;
+        outfile << "f 53 54 50 49" << std::endl;
+        
+        outfile << "g doorbottom6" << std::endl;
+        outfile << "usemtl pink" << std::endl;
+        outfile << "f 50 54 55 51" << std::endl;
     }
     
     
@@ -595,7 +795,7 @@ void init(){
 
 int main(int argc, char **argv) {
     
-    createOBJfile(10, 4);
+    createOBJfile(10, 6);
     // init GLUT and create window
     glutInit(&argc, argv);
     init();
