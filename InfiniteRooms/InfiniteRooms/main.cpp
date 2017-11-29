@@ -288,13 +288,17 @@ void resetToEntrance(){
 }
 
 void resetToDoor(){
-    
+    cout<<"Before room change PrevX: "<<room->currentNode->previousX<<endl;
+    cout<<"Before room change PrevZ: "<<room->currentNode->previousZ<<endl;
+    float aux_x = room->currentNode->previousX;
+    float aux_z = room->currentNode->previousZ;
     Node *temp = room->currentNode->parent;
     room->currentNode = temp;
     cout<<"-------------Previous room: "<<temp->info<<"\n";
     
-    float aux_x = room->currentNode->previousX;
-    float aux_z = room->currentNode->previousZ;
+    
+    cout<<"After room change PrevX: "<<room->currentNode->previousX<<endl;
+    cout<<"After room change PrevZ: "<<room->currentNode->previousZ<<endl;
     
 
     
@@ -303,7 +307,7 @@ void resetToDoor(){
     lz = 1.0f;
     // XZ position of the camera
     x = aux_x;
-    z = aux_z;
+    z = aux_z+2;
     cout<<"previous x: "<<aux_x<<endl<<"previous z: "<<aux_z<<endl;
     
 }
