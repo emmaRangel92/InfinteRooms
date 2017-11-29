@@ -42,6 +42,7 @@ public:
     std::string info;
     Node *parent;
     Node *children [NODE_SIZE];
+    int childCounter;
     
     Node(std::string info)
     {
@@ -62,13 +63,29 @@ public:
                 break;
             }
         }
-        
+        childCounter++;
     }
     
     void deleteChild(int index){
         Node *temp = children[index];
         children[index] = NULL;
         delete temp;
+        childCounter--;
         cleanup();
+    }
+    
+    int childNumber(){
+        
+        int counter = 0;
+        
+        for( int i = 0; i < (sizeof(children)/sizeof(*children)); i ++ ) {
+            if (children[i] != NULL){
+                counter++;
+            }else{
+                break;
+            }
+        }
+        
+        return counter;
     }
 };

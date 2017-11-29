@@ -13,6 +13,8 @@
 #include <GL/glut.h>
 #endif
 
+using namespace std;
+
 // angle of rotation for the camera direction
 float angle = 0.0f;
 // actual vector representing the camera's direction
@@ -245,9 +247,6 @@ void onMouse(int button, int state, int x, int y) {
     
 }
 
-
-
-
 void changeSize(int w, int h) {
     
     // Prevent a divide by zero, when window is too short
@@ -272,18 +271,114 @@ void changeSize(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
+void resetToEntrance(){
+    angle = 0.0f;
+    // actual vector representing the camera's direction
+    lx=0.0f;
+    lz=-1.0f;
+    // XZ position of the camera
+    x=0.0f;
+    z=5.0f;
+}
 
 void computePos(float deltaMove) {
     
     float auxX = x+deltaMove * lx * 0.1f;
     float auxZ = z+deltaMove * lz * 0.1f;
+    cout<<"x="<<x<<endl;
+    cout<<"z="<<z<<endl;
+    cout<<"children number: "<<root->childNumber()<<endl;
+    cout<<endl;
+    if(x >= -9.50 && x <= -9.0 && z <= 9.50 && z >= 9.00){
+        resetToEntrance();
+    }
     if(auxX >= -9.50 && auxX <= 9.50){
         x += deltaMove * lx * 0.1f;
     }
     if(auxZ >= -9.50 && auxZ <= 9.50){
         z += deltaMove * lz * 0.1f;
     }
+    switch (root->childNumber()) {
+        case 1:
+            if(x >= -8.25 && x <= -7.75 && z <= -9.0){
+                resetToEntrance();
+            }
+            break;
+        case 2:
+            if(x >= -8.25 && x <= -7.75 && z <= -9.0){
+                resetToEntrance();
+            }
+            else if(x >= -5.25 && x <= -4.75 && z <= -9.0){
+                resetToEntrance();
+            }
+            break;
+        case 3:
+            if(x >= -8.25 && x <= -7.75 && z <= -9.0){
+                resetToEntrance();
+            }
+            else if(x >= -5.25 && x <= -4.75 && z <= -9.0){
+                resetToEntrance();
+            }
+            else if(x >= -2.25 && x <= -1.75 && z <= -9.0){
+                resetToEntrance();
+            }
+            break;
+        case 4:
+            if(x >= -8.25 && x <= -7.75 && z <= -9.0){
+                resetToEntrance();
+            }
+            else if(x >= -5.25 && x <= -4.75 && z <= -9.0){
+                resetToEntrance();
+            }
+            else if(x >= -2.25 && x <= -1.75 && z <= -9.0){
+                resetToEntrance();
+            }
+            else if(x >= 0.75 && x <= 1.25 && z <= -9.0){
+                resetToEntrance();
+            }
+            break;
+        case 5:
+            if(x >= -8.25 && x <= -7.75 && z <= -9.0){
+                resetToEntrance();
+            }
+            else if(x >= -5.25 && x <= -4.75 && z <= -9.0){
+                resetToEntrance();
+            }
+            else if(x >= -2.25 && x <= -1.75 && z <= -9.0){
+                resetToEntrance();
+            }
+            else if(x >= 0.75 && x <= 1.25 && z <= -9.0){
+                resetToEntrance();
+            }
+            else if(x >= 3.75 && x <= 4.25 && z <= -9.0){
+                resetToEntrance();
+            }
+            break;
+        case 6:
+            if(x >= -8.25 && x <= -7.75 && z <= -9.0){
+                resetToEntrance();
+            }
+            else if(x >= -5.25 && x <= -4.75 && z <= -9.0){
+                resetToEntrance();
+            }
+            else if(x >= -2.25 && x <= -1.75 && z <= -9.0){
+                resetToEntrance();
+            }
+            else if(x >= 0.75 && x <= 1.25 && z <= -9.0){
+                resetToEntrance();
+            }
+            else if(x >= 3.75 && x <= 4.25 && z <= -9.0){
+                resetToEntrance();
+            }
+            else if(x >= 6.75 && x <= 7.25 && z <= -9.0){
+                resetToEntrance();
+            }
+            break;
+        default:
+            break;
+    }
 }
+
 
 
 void computeDir(float deltaAngle) {
