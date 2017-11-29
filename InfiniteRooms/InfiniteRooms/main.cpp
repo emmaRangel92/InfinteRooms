@@ -7,11 +7,14 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <stack>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
 #include <GL/glut.h>
 #endif
+
+using namespace std;
 
 // angle of rotation for the camera direction
 float angle = 0.0f;
@@ -26,6 +29,10 @@ float deltaMove = 0;
 //Room instantiate
 Room *room;
 Node *root;
+
+
+
+
 
 #define CREATE 1
 #define DELETE 2
@@ -257,9 +264,6 @@ void onMouse(int button, int state, int x, int y) {
     
 }
 
-
-
-
 void changeSize(int w, int h) {
     
     // Prevent a divide by zero, when window is too short
@@ -284,18 +288,230 @@ void changeSize(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
+void resetToEntrance(){
+
+    angle = 0.0f;
+    // actual vector representing the camera's direction
+    lx=0.0f;
+    lz=-1.0f;
+    // XZ position of the camera
+    x=0.0f;
+    z=5.0f;
+}
+
+void resetToDoor(){
+    cout<<"Before room change PrevX: "<<room->currentNode->previousX<<endl;
+    cout<<"Before room change PrevZ: "<<room->currentNode->previousZ<<endl;
+    float aux_x = room->currentNode->previousX;
+    float aux_z = room->currentNode->previousZ;
+    Node *temp = room->currentNode->parent;
+    room->currentNode = temp;
+    cout<<"-------------Previous room: "<<temp->info<<"\n";
+    
+    
+    cout<<"After room change PrevX: "<<room->currentNode->previousX<<endl;
+    cout<<"After room change PrevZ: "<<room->currentNode->previousZ<<endl;
+    
+
+    
+    // actual vector representing the camera's direction
+    lx = 0.0f;
+    lz = 1.0f;
+    // XZ position of the camera
+    x = aux_x;
+    z = aux_z+2;
+    cout<<"previous x: "<<aux_x<<endl<<"previous z: "<<aux_z<<endl;
+    
+}
 
 void computePos(float deltaMove) {
     
     float auxX = x+deltaMove * lx * 0.1f;
     float auxZ = z+deltaMove * lz * 0.1f;
+    cout<<"x="<<x<<endl;
+    cout<<"z="<<z<<endl;
+    cout<<"children number: "<<room->currentNode->childNumber()<<endl;
+    cout<<endl;
+
     if(auxX >= -9.50 && auxX <= 9.50){
         x += deltaMove * lx * 0.1f;
     }
     if(auxZ >= -9.50 && auxZ <= 9.50){
         z += deltaMove * lz * 0.1f;
     }
+    
+    if(x >= -1.00 && x <= 1.00 && z <= 9.5 && z>=9.2 && room->currentNode->parent != NULL){
+        resetToDoor();
+    }
+    
+    switch (room->currentNode->childNumber()) {
+        case 1:
+            if(x >= -8.25 && x <= -7.75 && z <= -9.0){
+            
+                room->currentNode = room->currentNode->children[0];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+
+            }
+            break;
+        case 2:
+            if(x >= -8.25 && x <= -7.75 && z <= -9.0){
+                room->currentNode = room->currentNode->children[0];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            else if(x >= -5.25 && x <= -4.75 && z <= -9.0){
+                room->currentNode = room->currentNode->children[1];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            break;
+        case 3:
+            if(x >= -8.25 && x <= -7.75 && z <= -9.0){
+                room->currentNode = room->currentNode->children[0];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            else if(x >= -5.25 && x <= -4.75 && z <= -9.0){
+                room->currentNode = room->currentNode->children[1];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            else if(x >= -2.25 && x <= -1.75 && z <= -9.0){
+                room->currentNode = room->currentNode->children[2];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            break;
+        case 4:
+            if(x >= -8.25 && x <= -7.75 && z <= -9.0){
+                room->currentNode = room->currentNode->children[0];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            else if(x >= -5.25 && x <= -4.75 && z <= -9.0){
+                room->currentNode = room->currentNode->children[1];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            else if(x >= -2.25 && x <= -1.75 && z <= -9.0){
+                room->currentNode = room->currentNode->children[2];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+              
+                resetToEntrance();
+            }
+            else if(x >= 0.75 && x <= 1.25 && z <= -9.0){
+                room->currentNode = room->currentNode->children[3];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            break;
+        case 5:
+            if(x >= -8.25 && x <= -7.75 && z <= -9.0){
+                room->currentNode = room->currentNode->children[0];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            else if(x >= -5.25 && x <= -4.75 && z <= -9.0){
+                room->currentNode = room->currentNode->children[1];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            else if(x >= -2.25 && x <= -1.75 && z <= -9.0){
+                room->currentNode = room->currentNode->children[2];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            else if(x >= 0.75 && x <= 1.25 && z <= -9.0){
+                room->currentNode = room->currentNode->children[3];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            else if(x >= 3.75 && x <= 4.25 && z <= -9.0){
+                room->currentNode = room->currentNode->children[4];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            break;
+        case 6:
+            if(x >= -8.25 && x <= -7.75 && z <= -9.0){
+                room->currentNode = room->currentNode->children[0];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            else if(x >= -5.25 && x <= -4.75 && z <= -9.0){
+                room->currentNode = room->currentNode->children[1];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            else if(x >= -2.25 && x <= -1.75 && z <= -9.0){
+                room->currentNode = room->currentNode->children[2];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            else if(x >= 0.75 && x <= 1.25 && z <= -9.0){
+                room->currentNode = room->currentNode->children[3];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            else if(x >= 3.75 && x <= 4.25 && z <= -9.0){
+                room->currentNode = room->currentNode->children[4];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            else if(x >= 6.75 && x <= 7.25 && z <= -9.0){
+                room->currentNode = room->currentNode->children[5];
+                room->currentNode->previousX = x;
+                room->currentNode->previousZ = z;
+                cout<<"x: "<<x<<endl<<"z: "<<z<<endl;
+                resetToEntrance();
+            }
+            break;
+        default:
+            break;
+    }
 }
+
 
 
 void computeDir(float deltaAngle) {
@@ -339,34 +555,6 @@ void renderScene(void) {
     room->drawDoors();
     glPopMatrix();
     
-    /*
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-    double w = glutGet( GLUT_WINDOW_WIDTH );
-    double h = glutGet( GLUT_WINDOW_HEIGHT );
-    glOrtho( 0, w, 0, h, -1, 1 );
-    
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
-    
-    for( size_t i = 0; i < names.size(); ++i )
-    {
-        std::ostringstream oss;
-        oss << ( i + 1 ) << ": " << names[i];
-        
-        void* font = GLUT_BITMAP_9_BY_15;
-        const int fontHeight = glutBitmapWidth(font, 1);
-        glRasterPos2i( 10, h - ( fontHeight * ( i + 1 ) ) );
-        
-        char *cstr = new char[oss.str().length() + 1];
-        strcpy(cstr, oss.str().c_str());
-        renderBitmapString((void *) font, cstr);
-        
-        delete [] cstr;
-        
-    }
-    */
-    
     glutSwapBuffers();
 }
 
@@ -397,8 +585,11 @@ void init(){
     root->parent = NULL;
     room = new Room();
     
-    root->add_child(new Node("RoomN"));
-    room->currentNode = root;
+    Node *temp = new Node("RoomN");
+    temp->parent = root;
+    root->add_child(temp);
+    
+    room->currentNode = temp;
     
 }
 

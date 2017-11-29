@@ -38,7 +38,10 @@ public:
     
     void addBox(std::string roomName){
         
-        currentNode->add_child(new Node(roomName));
+        Node* temp =new Node(roomName);
+        currentNode->add_child(temp);
+        temp->parent = currentNode;
+        
         
     }
     
@@ -60,50 +63,6 @@ public:
         }
         
         
-    }
-    
-    void drawCeiling( int wSize){
-        /* Ceiling */
-        
-        glColor3f(0.4f, 0.4f, 0.4f);
-        glVertex3f(-wSize,wSize,-wSize);
-        glVertex3f(wSize,wSize,-wSize);
-        glVertex3f(wSize,wSize,wSize);
-        glVertex3f(-wSize,wSize,wSize);
-    }
-    void drawFloor( int wSize){
-        /* Floor */
-        glColor3f(0.4f, 0.4f, 0.4f);
-        glVertex3f(-wSize,-wSize,-wSize);
-        glVertex3f(wSize,-wSize,-wSize);
-        glVertex3f(wSize,-wSize,wSize);
-        glVertex3f(-wSize,-wSize,wSize);
-    }
-    
-    void drawWalls(int wSize){
-        /* Walls */
-        
-        glColor3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(-wSize,-wSize,wSize);
-        glVertex3f(wSize,-wSize,wSize);
-        glVertex3f(wSize,wSize,wSize);
-        glVertex3f(-wSize,wSize,wSize);
-        
-        glColor3f(0.0f, 1.0f, 0.0f);
-        glVertex3f(-wSize,-wSize,-wSize);
-        glVertex3f(wSize,-wSize,-wSize);
-        glVertex3f(wSize,wSize,-wSize);
-        glVertex3f(-wSize,wSize,-wSize);
-        glColor3f(0.0f, 0.0f, 1.0f);
-        glVertex3f(wSize,wSize,wSize);
-        glVertex3f(wSize,-wSize,wSize);
-        glVertex3f(wSize,-wSize,-wSize);
-        glVertex3f(wSize,wSize,-wSize);
-        glColor3f(0.5f, 0.5f, 1.0f);
-        glVertex3f(-wSize,wSize,wSize);
-        glVertex3f(-wSize,-wSize,wSize);
-        glVertex3f(-wSize,-wSize,-wSize);
-        glVertex3f(-wSize,wSize,-wSize);
     }
     
     void drawDoors(){
