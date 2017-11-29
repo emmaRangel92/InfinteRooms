@@ -43,6 +43,8 @@ public:
     Node *parent;
     Node *children [NODE_SIZE];
     int childCounter;
+    float previousX;
+    float previousZ;
     
     Node(std::string info)
     {
@@ -55,7 +57,6 @@ public:
     }
     
     void add_child(Node *child) {
-        child->parent = this;
         
         for( int i = 0; i < (sizeof(children)/sizeof(*children)); i ++ ) {
             if (children[i] == NULL){
